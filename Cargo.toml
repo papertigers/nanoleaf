@@ -1,0 +1,24 @@
+[package]
+name = "nanoleaf"
+version = "0.1.0"
+description = "Asynchronous client library for interacting with NanoLeaf devices"
+repository = "https://github.com/papertigers/nanoleaf"
+keywords = ["nanoleaf", "api", "tokio", "automation"]
+authors = ["Mike Zeller <mike@mikezeller.net>"]
+edition = "2018"
+license = "MIT"
+categories = [
+	"home-automation",
+	"api",
+	"smart-lighting"
+]
+
+[dependencies]
+reqwest = "0.9"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+url = "1.7"
+futures = "0.1"
+failure = "0.1"
+log = "0.4"
+tokio = "0.1"
