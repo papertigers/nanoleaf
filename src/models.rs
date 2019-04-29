@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use serde_repr::*;
 
 #[derive(Debug, Deserialize)]
 pub struct Authorization {
@@ -74,6 +75,17 @@ pub struct Layout {
     pub position_data: Vec<Position>,
 }
 
+#[derive(Debug, Serialize_repr, Deserialize_repr)]
+#[repr(u8)]
+pub enum ShapeType {
+    Triangle = 0,
+    Rhythm = 1,
+    Square = 2,
+    ControlSquarePrimary = 3,
+    ControlSquarePassive = 4,
+    PowerSupply = 5,
+}
+
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Position {
     #[serde(rename = "panelId")]
@@ -81,6 +93,8 @@ pub struct Position {
     pub o: i32,
     pub x: i32,
     pub y: i32,
+    #[serde(rename = "shapeType")]
+    pub shape_type: ShapeType,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
