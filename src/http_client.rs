@@ -50,7 +50,7 @@ impl HttpClient {
             .map_err(Error::from)
             .into_future()
             .and_then(move |url| {
-                info!("POST {}", url.as_str());
+                info!("GET {}", url.as_str());
 
                 client
                     .get(url.as_str())
@@ -68,7 +68,7 @@ impl HttpClient {
             .map_err(Error::from)
             .into_future()
             .and_then(move |url| {
-                info!("POST {}", url.as_str());
+                info!("DELETE {}", url.as_str());
 
                 client.get(url.as_str()).send().map_err(Error::from)
             })
@@ -86,7 +86,7 @@ impl HttpClient {
             .map_err(Error::from)
             .into_future()
             .and_then(move |url| {
-                info!("POST {}", url.as_str());
+                info!("PUT {}", url.as_str());
 
                 client
                     .put(url.as_str())
