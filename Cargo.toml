@@ -1,6 +1,6 @@
 [package]
 name = "nanoleaf"
-version = "0.1.0"
+version = "0.1.1"
 description = "Asynchronous client library for interacting with NanoLeaf devices"
 repository = "https://github.com/papertigers/nanoleaf"
 keywords = ["nanoleaf", "api", "tokio", "automation"]
