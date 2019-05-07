@@ -3,6 +3,8 @@ pub mod error;
 mod http_client;
 pub mod models;
 
+pub use models::*;
+
 #[cfg(test)]
 mod tests {
     #[test]

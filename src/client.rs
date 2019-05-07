@@ -98,7 +98,7 @@ impl Client {
     }
 
     // ====================
-    // Sat
+    // Saturation
     // ====================
     pub fn get_saturation(&self, token: &str) -> impl Future<Item = Range, Error = Error> {
         self.get_value(&format!("{}/state/sat", token))
