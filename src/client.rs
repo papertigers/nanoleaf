@@ -11,6 +11,16 @@ use serde_json::json;
 use std::net::SocketAddr;
 use url::Url;
 
+enum EffectsCommand {
+    Add,
+    Delete,
+    Request,
+    RequestAll,
+    RequestPlugins,
+    Display,
+    DisplayTemp,
+}
+
 pub enum NanoleafState {
     On,
     Off,
@@ -48,6 +58,10 @@ impl Client {
 
     pub fn get_panels(&self, token: &str) -> impl Future<Item = PanelInfo, Error = Error> {
         self.get_value(token)
+    }
+
+    pub fn identify(&self, token: &str) -> impl Future<Item = (), Error = Error> {
+        self.put_value(&format!("{}/identify", token), "", "")
     }
 
     // ====================
@@ -139,8 +153,14 @@ impl Client {
         self.get_value(&format!("{}/effects/select", token))
     }
 
-    pub fn get_all_effects(&self, token: &str) -> impl Future<Item = Vec<String>, Error = Error> {
+    pub fn list_effects(&self, token: &str) -> impl Future<Item = Vec<String>, Error = Error> {
         self.get_value(&format!("{}/effects/effectsList", token))
+    }
+
+    pub fn get_all_effects(&self, token: &str) -> impl Future<Item = Animations, Error = Error> {
+        // XXX turn this into an enum
+        let command = json!({ "command": "requestAll"});
+        self.put_value(&format!("{}/effects", token), "write", command)
     }
 
     pub fn set_effect(&self, token: &str, effect: &str) -> impl Future<Item = (), Error = Error> {
@@ -175,17 +195,18 @@ impl Client {
             .and_then(|mut res| res.json::<T>().map_err(Error::from))
     }
 
-    fn put_value<T: Serialize>(
+    fn put_value<'de, T: Serialize, D: DeserializeOwned>(
         &self,
         path: &str,
         key: &str,
         value: T,
-    ) -> impl Future<Item = (), Error = Error> {
+    ) -> impl Future<Item = D, Error = Error> {
         let body = json!({ key: value });
         self.inner
             .put(path, body.to_string())
             .and_then(|res| res.error_for_status().map_err(Error::from))
-            // API returns 204 No Content or a 4xx error only
-            .map(|_| ())
+            .and_then(|mut res| res.json::<D>().map_err(Error::from))
+        // API returns 204 No Content or a 4xx error only
+        //.map(|_| ())
     }
 }
